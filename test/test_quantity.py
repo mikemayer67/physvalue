@@ -1,6 +1,6 @@
 import unittest
 
-from pval.quantity import PhysicalQuantity as Q
+from pval.quantity import Quantity as Q
 from pval.exceptions import InvalidUnitDefinition
 from pval.exceptions import IncompatibleUnits
 
@@ -116,6 +116,26 @@ class QuantityTests(unittest.TestCase):
 
         with self.assertRaises(IncompatibleUnits) as cm:
             c = 3 - a
+
+    def test_mul(self):
+        v = Q(1.2,m=1,sec=-1)
+        t = Q(3,sec=1,K=5)
+
+        d = v * t
+        self.assertAlmostEqual(d.value,3.6)
+        self.assertEqual(d.unit,(1,0,0,0,5,0,0))
+
+        d = t * v
+        self.assertAlmostEqual(d.value,3.6)
+        self.assertEqual(d.unit,(1,0,0,0,5,0,0))
+
+        vv = 2.1 * v
+        self.assertAlmostEqual(vv.value,2.52)
+        self.assertEqual(vv.unit,(1,0,-1,0,0,0,0))
+
+        vv = v * -3
+        self.assertAlmostEqual(vv.value,-3.6)
+        self.assertEqual(vv.unit,(1,0,-1,0,0,0,0))
 
 
 

@@ -2,6 +2,6 @@
 
 __version__ = "0.01"
 
-from .quantity import PhysicalQuantity
+from .quantity import Quantity
 
 

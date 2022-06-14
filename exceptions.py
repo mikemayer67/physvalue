@@ -5,7 +5,7 @@ class PhysValueError(Exception):
 
 class InvalidUnitDefinition(TypeError):
   def __init__(self,e):
-    TypeError.__init__(self,f"Expected PhysicalQuantity or tuple of 7 values, got {e}")
+    TypeError.__init__(self,f"Expected Quantity or tuple of 7 values, got {e}")
 
 class IncompatibleUnits(TypeError):
   def __init__(self,a,b):
