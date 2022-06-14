@@ -1,8 +1,6 @@
-"""Primary class for expressing physical quantities"""
+"""Class for expressing physical quantities"""
 
 from .exceptions import IncompatibleUnits
-
-from math import sqrt
 
 class Quantity:
     """A physical quantity consistiting of a value and fundamental units
@@ -56,7 +54,9 @@ class Quantity:
     __slots__ = ('value','unit')
 
 
-    def __new__(cls, value=1, unit=None, *, m=0, kg=0, s=0, C=0, K=0, cand=0, mol=0):
+    def __new__(cls, value=1, unit=None, 
+            *, 
+            m=0, kg=0, s=0, C=0, K=0, cand=0, mol=0):
 
         if unit is None:
             unit = (m,kg,s,C,K,cand,mol)
@@ -69,7 +69,9 @@ class Quantity:
             return value
 
 
-    def __init__(self, value=1, unit=None, *, m=0, kg=0, s=0, C=0, K=0, cand=0, mol=0):
+    def __init__(self, value=1, unit=None, 
+            *, 
+            m=0, kg=0, s=0, C=0, K=0, cand=0, mol=0):
         if unit is None:
             self.unit = (m,kg,s,C,K,cand,mol)
             self.value = value
