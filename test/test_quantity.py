@@ -137,6 +137,46 @@ class QuantityTests(unittest.TestCase):
         self.assertAlmostEqual(vv.value,-3.6)
         self.assertEqual(vv.unit,(1,0,-1,0,0,0,0))
 
+    def test_truediv(self):
+        d = Q(1.2,m=1)
+        t = Q(3,sec=1,K=5)
+
+        v = d/t
+        self.assertAlmostEqual(v.value,0.4)
+        self.assertEqual(v.unit,(1,0,-1,0,-5,0,0))
+
+        q = t/d
+        self.assertAlmostEqual(q.value,2.5)
+        self.assertEqual(q.unit,(-1,0,1,0,5,0,0))
+
+        q = t / 2 
+        self.assertAlmostEqual(q.value,1.5)
+        self.assertEqual(q.unit,(0,0,1,0,5,0,0))
+
+        q = -3.3 / t
+        self.assertAlmostEqual(q.value,-1.1)
+        self.assertEqual(q.unit,(0,0,-1,0,-5,0,0))
+
+    def test_floordiv(self):
+        d = Q(1.2,m=1)
+        t = Q(3,sec=1,K=5)
+
+        v = d//t
+        self.assertAlmostEqual(v.value,0.0)
+        self.assertEqual(v.unit,(1,0,-1,0,-5,0,0))
+
+        q = t//d
+        self.assertAlmostEqual(q.value,2)
+        self.assertEqual(q.unit,(-1,0,1,0,5,0,0))
+
+        q = t // 2 
+        self.assertAlmostEqual(q.value,1)
+        self.assertEqual(q.unit,(0,0,1,0,5,0,0))
+
+        q = -3.3 // t
+        self.assertAlmostEqual(q.value,-2)
+        self.assertEqual(q.unit,(0,0,-1,0,-5,0,0))
+
 
 
 
