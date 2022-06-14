@@ -30,13 +30,13 @@ class Quantity:
 
         Args:
             value (number): numeric value in MKS units
-            m (optional): exponent on the length component
-            kg (optional): exponent on the mass component
-            s (optional): exponent on the time component
-            C (optional): exponent on the electric charge component
-            K (optional): exponent on the absolute temperature component
-            cand (optional): exponent on the light intensity component
-            mol (optional): exponent on the substance quatnity component
+            length (optional): exponent on the length component
+            mass (optional): exponent on the mass component
+            time (optional): exponent on the time component
+            charge (optional): exponent on the electric charge component
+            temp (optional): exponent on the absolute temperature component
+            illum (optional): exponent on the light intensity component
+            quant (optional): exponent on the substance quatnity component
 
     - scalar and base quantity
 
@@ -56,10 +56,10 @@ class Quantity:
 
     def __new__(cls, value=1, unit=None, 
             *, 
-            m=0, kg=0, s=0, C=0, K=0, cand=0, mol=0):
+            length=0, mass=0, time=0, charge=0, temp=0, illum=0, quant=0):
 
         if unit is None:
-            unit = (m,kg,s,C,K,cand,mol)
+            unit = (length,mass,time,charge,temp,illum,quant)
         elif isinstance(unit,Quantity):
             unit = unit.unit
 
@@ -71,9 +71,9 @@ class Quantity:
 
     def __init__(self, value=1, unit=None, 
             *, 
-            m=0, kg=0, s=0, C=0, K=0, cand=0, mol=0):
+            length=0, mass=0, time=0, charge=0, temp=0, illum=0, quant=0):
         if unit is None:
-            self.unit = (m,kg,s,C,K,cand,mol)
+            self.unit = (length,mass,time,charge,temp,illum,quant)
             self.value = value
         elif isinstance(unit,Quantity):
             self.unit = unit.unit
@@ -208,7 +208,7 @@ class Quantity:
     __bool__ = __nonzero__
 
     def __repr__(self):
-        keys = ('m','kg','s','C','K','cand','mol')
+        keys = ('length','mass','time','charge','temp','illum','quant')
         return (f"Quantity({self.value},"
                 + ",".join(f"{n}={e}" for n,e in zip(keys,self.unit) if e)
                 + ",)")

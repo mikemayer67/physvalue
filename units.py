@@ -37,16 +37,16 @@ class Units:
     @classmethod
     def add_mks_units(cls):
         # base units
-        cls.add('m',1,m=1,can_prefix=True)
-        cls.add('kg',1,kg=1)
-        cls.add('s',1,s=1,can_prefix=True)
-        cls.add('C',1,C=1,can_prefix=True)
-        cls.add('K',1,K=1)
-        cls.add('cand',1,cand=1)
-        cls.add('mol',1,mol=1)
+        cls.add('m',1,length=1,can_prefix=True)
+        cls.add('kg',1,mass=1)
+        cls.add('s',1,time=1,can_prefix=True)
+        cls.add('C',1,charge=1)
+        cls.add('K',1,temp=1)
+        cls.add('cand',1,illum=1)
+        cls.add('mol',1,quant=1)
 
         # related units and synonyms
-        cls.add('g',0.001,kg=1,can_prefix=True)
-        cls.add('sec',1,s=1,can_prefix=True)
-        cls.add('coul',1,C=1,can_prefix=True)
+        cls.add('g',0.001,mass=1,can_prefix=True)
+        cls.add('sec',1,time=1,can_prefix=True)
+        cls.add('coul',1,charge=1,can_prefix=True)
 

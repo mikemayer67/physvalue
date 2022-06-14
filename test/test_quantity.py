@@ -7,11 +7,11 @@ import math
 
 class QuantityTests(unittest.TestCase):
     def test_init(self):
-        q = Q(1,m=1)
+        q = Q(1,length=1)
         self.assertEqual(q.value,1)
         self.assertEqual(q.unit,(1,0,0,0,0,0,0))
 
-        q = Q(3.5,m=1,s=-1)
+        q = Q(3.5,length=1,time=-1)
         self.assertEqual(q.value,3.5)
         self.assertEqual(q.unit,(1,0,-1,0,0,0,0))
 
@@ -48,33 +48,33 @@ class QuantityTests(unittest.TestCase):
 
 
     def test_compatible(self):
-        x_m = Q(1.2,m=1)
-        x_ft = Q(3.5,m=1)
-        x_kg = Q(3.5,kg=1)
+        x_m = Q(1.2,length=1)
+        x_ft = Q(3.5,length=1)
+        x_kg = Q(3.5,mass=1)
         self.assertTrue( x_m.compatible(x_ft) )
         self.assertFalse( x_m.compatible(x_kg) )
 
     def test_abs(self):
-        q = Q(1,kg=1)
+        q = Q(1,mass=1)
         r = abs(q)
         self.assertEqual(q.value,1)
         self.assertEqual(r.value,1)
         self.assertEqual(q.unit,(0,1,0,0,0,0,0))
 
-        q = Q(-1.2,kg=1)
+        q = Q(-1.2,mass=1)
         r = abs(q)
         self.assertEqual(q.value,-1.2)
         self.assertEqual(r.value,1.2)
         self.assertEqual(q.unit,(0,1,0,0,0,0,0))
 
     def test_add(self):
-        a = Q(1.2,m=1,s=-1)
-        b = Q(10,m=1,s=-1)
+        a = Q(1.2,length=1,time=-1)
+        b = Q(10,length=1,time=-1)
         c = a + b
         self.assertEqual(c.value,11.2)
         self.assertEqual(c.unit,(1,0,-1,0,0,0,0))
 
-        b = Q(10,m=1,s=-2)
+        b = Q(10,length=1,time=-2)
         with self.assertRaises(IncompatibleUnits) as cm:
             c = a + b
 
@@ -85,7 +85,7 @@ class QuantityTests(unittest.TestCase):
             c = 2.5 + a
 
     def test_neg(self):
-        q = Q(1.2,m=1,s=-1)
+        q = Q(1.2,length=1,time=-1)
         n = -q
         p = -n
         self.assertEqual(q.value,1.2)
@@ -96,8 +96,8 @@ class QuantityTests(unittest.TestCase):
         self.assertEqual(p.unit,(1,0,-1,0,0,0,0))
 
     def test_sub(self):
-        a = Q(1.2,m=2,s=-1)
-        b = Q(10,m=2,s=-1)
+        a = Q(1.2,length=2,time=-1)
+        b = Q(10,length=2,time=-1)
         c = b-a
         self.assertEqual(c.value,8.8)
         self.assertEqual(c.unit,(2,0,-1,0,0,0,0))
@@ -105,7 +105,7 @@ class QuantityTests(unittest.TestCase):
         self.assertEqual(c.value,-8.8)
         self.assertEqual(c.unit,(2,0,-1,0,0,0,0))
 
-        b = Q(10,m=1,s=-2)
+        b = Q(10,length=1,time=-2)
         with self.assertRaises(IncompatibleUnits) as cm:
             c = a - b
 
@@ -119,8 +119,8 @@ class QuantityTests(unittest.TestCase):
             c = 3 - a
 
     def test_mul(self):
-        v = Q(1.2,m=1,s=-1)
-        t = Q(3,s=1,K=5)
+        v = Q(1.2,length=1,time=-1)
+        t = Q(3,time=1,temp=5)
 
         d = v * t
         self.assertAlmostEqual(d.value,3.6)
@@ -139,8 +139,8 @@ class QuantityTests(unittest.TestCase):
         self.assertEqual(vv.unit,(1,0,-1,0,0,0,0))
 
     def test_truediv(self):
-        d = Q(1.2,m=1)
-        t = Q(3,s=1,K=5)
+        d = Q(1.2,length=1)
+        t = Q(3,time=1,temp=5)
 
         v = d/t
         self.assertAlmostEqual(v.value,0.4)
@@ -159,8 +159,8 @@ class QuantityTests(unittest.TestCase):
         self.assertEqual(q.unit,(0,0,-1,0,-5,0,0))
 
     def test_floordiv(self):
-        d = Q(1.2,m=1)
-        t = Q(3,s=1,K=5)
+        d = Q(1.2,length=1)
+        t = Q(3,time=1,temp=5)
 
         v = d//t
         self.assertAlmostEqual(v.value,0.0)
@@ -179,7 +179,7 @@ class QuantityTests(unittest.TestCase):
         self.assertEqual(q.unit,(0,0,-1,0,-5,0,0))
 
     def test_pow(self):
-        x = Q(2.5, m=1)
+        x = Q(2.5, length=1)
         a = x ** 2
         v = x ** 3
 
@@ -198,14 +198,14 @@ class QuantityTests(unittest.TestCase):
         self.assertEqual(r.unit,(0.5,0,0,0,0,0,0))
 
     def test_root(self):
-        x = Q(2.5, m=1)
+        x = Q(2.5, length=1)
         r = x.root(3)
         self.assertEqual(r.value, 2.5**(1/3))
         self.assertEqual(r.unit,(1/3,0,0,0,0,0,0))
 
 
     def test_sqrt(self):
-        x = Q(2.5, m=1)
+        x = Q(2.5, length=1)
         r = x.sqrt()
         self.assertEqual(r.value, math.sqrt(2.5))
         self.assertEqual(r.unit,(0.5,0,0,0,0,0,0))
@@ -214,10 +214,10 @@ class QuantityTests(unittest.TestCase):
 
 
     def test_eq(self):
-        a = Q(3.2, m=-3, kg=1)
+        a = Q(3.2, length=-3, mass=1)
         b = a
-        c = Q(1, m=-3, kg=1)
-        d = Q(1, kg=1)
+        c = Q(1, length=-3, mass=1)
+        d = Q(1, mass=1)
 
         self.assertTrue(a == a)
         self.assertTrue(a == b)
@@ -232,9 +232,9 @@ class QuantityTests(unittest.TestCase):
             r = (5.2 == a)
 
     def test_ne(self):
-        a = Q(3.2, m=-3, kg=1)
-        b = Q(1, m=-3, kg=1)
-        c = Q(1, kg=1)
+        a = Q(3.2, length=-3, mass=1)
+        b = Q(1, length=-3, mass=1)
+        c = Q(1, mass=1)
 
         self.assertFalse(a != a)
         self.assertTrue(a != b)
@@ -247,9 +247,9 @@ class QuantityTests(unittest.TestCase):
             r = (5.2 != a)
 
     def test_lt(self):
-        a = Q(3.2, m=-3, kg=1)
-        b = Q(1, m=-3, kg=1)
-        c = Q(1, kg=1)
+        a = Q(3.2, length=-3, mass=1)
+        b = Q(1, length=-3, mass=1)
+        c = Q(1, mass=1)
 
         self.assertFalse(a < a)
         self.assertFalse(a < b)
@@ -263,9 +263,9 @@ class QuantityTests(unittest.TestCase):
             r = (5.2 < a)
 
     def test_le(self):
-        a = Q(3.2, m=-3, kg=1)
-        b = Q(1, m=-3, kg=1)
-        c = Q(1, kg=1)
+        a = Q(3.2, length=-3, mass=1)
+        b = Q(1, length=-3, mass=1)
+        c = Q(1, mass=1)
 
         self.assertTrue(a <= a)
         self.assertFalse(a <= b)
@@ -279,9 +279,9 @@ class QuantityTests(unittest.TestCase):
             r = (5.2 <= a)
 
     def test_gt(self):
-        a = Q(3.2, m=-3, kg=1)
-        b = Q(1, m=-3, kg=1)
-        c = Q(1, kg=1)
+        a = Q(3.2, length=-3, mass=1)
+        b = Q(1, length=-3, mass=1)
+        c = Q(1, mass=1)
 
         self.assertFalse(a > a)
         self.assertTrue(a > b)
@@ -295,9 +295,9 @@ class QuantityTests(unittest.TestCase):
             r = (5.2 > a)
 
     def test_ge(self):
-        a = Q(3.2, m=-3, kg=1)
-        b = Q(1, m=-3, kg=1)
-        c = Q(1, kg=1)
+        a = Q(3.2, length=-3, mass=1)
+        b = Q(1, length=-3, mass=1)
+        c = Q(1, mass=1)
 
         self.assertTrue(a >= a)
         self.assertTrue(a >= b)
@@ -311,8 +311,8 @@ class QuantityTests(unittest.TestCase):
             r = (5.2 >= a)
 
     def test_nonzero(self):
-        a = Q(3.2, m=-3, kg=1)
-        b = Q(0, m=2)
+        a = Q(3.2, length=-3, mass=1)
+        b = Q(0, length=2)
 
         self.assertTrue(a)
         self.assertFalse(b)
