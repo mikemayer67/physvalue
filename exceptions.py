@@ -3,10 +3,6 @@
 class PhysValueError(Exception):
     pass
 
-class InvalidUnitDefinition(TypeError):
-  def __init__(self,e):
-    TypeError.__init__(self,f"Expected Quantity or tuple of 7 values, got {e}")
-
 class IncompatibleUnits(TypeError):
   def __init__(self,a,b):
       a_unit = a.unit if hasattr(a,"unit") else "dimensionless"
