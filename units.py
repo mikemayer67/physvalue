@@ -118,6 +118,7 @@ class Units:
 
     def add_angle_units(self):
         self.add('deg',pi/180,self.rad)
+        self.add('cycle',360*self.deg)
         self.add('sr',self.rad**2)
 
     def add_time_units(self):

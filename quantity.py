@@ -231,6 +231,12 @@ class Quantity:
         else:
             return f"{self.value}"
 
+    def __getattr__(self,name):
+        from pval import units as u
+        unit = getattr(u,name)
+        self.assert_compatible(unit)
+        return self/unit
+
     def __float__(self):
         if not self.compatible(Quantity(1,angle=1)):
             raise NotAnAngle('float',self)
