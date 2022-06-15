@@ -5,4 +5,6 @@ __version__ = "0.01"
 from .quantity import Quantity
 from .units import Units
 
+units = Units()
+
 
