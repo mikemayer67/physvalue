@@ -6,9 +6,9 @@ class Quantity:
     """A physical quantity consistiting of a value and fundamental units
 
     An instance of the Quantity class can represent any physical measurement composed
-    of the 7 fundamental physical measurements (listed below).  It contains
+    of 7 fundamental physical units (listed below).  It contains
     a scalar value and a tuple containing the exponents associated with each
-    of the 7 fundamental measurements.
+    of the 7 fundamental units.
 
     The scalar value is set relative to the base units for each of the physical
     measurements.
@@ -20,7 +20,7 @@ class Quantity:
         - Electric charge (coul)
         - Absolute temperature (Kelvin)
         - Intensity of lighth (candela)
-        - Quantity of substance (mole)
+        - Angle (rad)
 
     Constructor:
 
@@ -36,7 +36,7 @@ class Quantity:
             charge (optional): exponent on the electric charge component
             temp (optional): exponent on the absolute temperature component
             illum (optional): exponent on the light intensity component
-            quant (optional): exponent on the substance quatnity component
+            angle (optional): exponent on the angle quantity component
 
     - scalar and base quantity
 
@@ -56,10 +56,10 @@ class Quantity:
 
     def __new__(cls, value=1, unit=None, 
             *, 
-            length=0, mass=0, time=0, charge=0, temp=0, illum=0, quant=0):
+            length=0,mass=0,time=0,charge=0,temp=0,illum=0,angle=0):
 
         if unit is None:
-            unit = (length,mass,time,charge,temp,illum,quant)
+            unit = (length,mass,time,charge,temp,illum,angle)
         elif isinstance(unit,Quantity):
             unit = unit.unit
 
@@ -71,9 +71,9 @@ class Quantity:
 
     def __init__(self, value=1, unit=None, 
             *, 
-            length=0, mass=0, time=0, charge=0, temp=0, illum=0, quant=0):
+            length=0,mass=0,time=0,charge=0,temp=0,illum=0,angle=0):
         if unit is None:
-            self.unit = (length,mass,time,charge,temp,illum,quant)
+            self.unit = (length,mass,time,charge,temp,illum,angle)
             self.value = value
         elif isinstance(unit,Quantity):
             self.unit = unit.unit
@@ -82,7 +82,7 @@ class Quantity:
             self.unit = tuple(unit)
             self.value = value
         else:
-            raise TypeError("unit value must be Quantity of tuple of length 7")
+            raise TypeError("unit value must be Quantity of tuple of length 8")
 
     def compatible(self,other):
         try:
@@ -208,13 +208,13 @@ class Quantity:
     __bool__ = __nonzero__
 
     def __repr__(self):
-        keys = ('length','mass','time','charge','temp','illum','quant')
+        keys = ('length','mass','time','charge','temp','illum','angle')
         return (f"Quantity({self.value},"
                 + ",".join(f"{n}={e}" for n,e in zip(keys,self.unit) if e)
                 + ",)")
 
     def __str__(self):
-        names = ('m','kg','s','C','K','cand','mol')
+        names = ('m','kg','s','C','K','cd','rad')
         num = " ".join(f"{n}" if e==1 else f"{n}^{e}" for n,e in zip(names,self.unit) if e>0)
         den = " ".join(f"{n}" if e==-1 else f"{n}^{-e}" for n,e in zip(names,self.unit) if e<0)
 

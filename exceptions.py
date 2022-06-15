@@ -17,3 +17,8 @@ class AttemptToAssignToUnit(RuntimeError):
     def __init__(self,name):
         RuntimeError.__init__(self,
             f"Cannot directly assign value to units.{name}" )
+
+class UndefinedUnit(KeyError):
+    def __init__(self,name):
+        KeyError.__init__(self,
+            f"Unrecognized unit {name}. Consider adding it with the Units.add() method")
