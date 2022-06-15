@@ -1,6 +1,9 @@
 """Class for expressing physical quantities"""
 
 from .exceptions import IncompatibleUnits
+from .exceptions import NotAnAngle
+
+import math
 
 class Quantity:
     """A physical quantity consistiting of a value and fundamental units
@@ -227,3 +230,25 @@ class Quantity:
             return f"{self.value}[1/{den}]"
         else:
             return f"{self.value}"
+
+    def __float__(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('float',self)
+        return self.value
+
+    # the following are to support numpy trig functions
+    def sin(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('sin',self)
+        return math.sin(self.value)
+
+    def cos(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('sin',self)
+        return math.cos(self.value)
+
+    def tan(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('sin',self)
+        return math.tan(self.value)
+

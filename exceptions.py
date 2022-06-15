@@ -22,3 +22,8 @@ class UndefinedUnit(KeyError):
     def __init__(self,name):
         KeyError.__init__(self,
             f"Unrecognized unit {name}. Consider adding it with the Units.add() method")
+
+class NotAnAngle(RuntimeError):
+    def __init__(self,func,unit):
+        RuntimeError(f"Can only apply {func} to angles, not {unit}")
+
