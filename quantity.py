@@ -4,6 +4,7 @@ from .exceptions import IncompatibleUnits
 from .exceptions import NotAnAngle
 
 import math
+import numpy as np
 
 class Quantity:
     """A physical quantity consistiting of a value and fundamental units
@@ -248,6 +249,20 @@ class Quantity:
         if not self.compatible(Quantity(1,angle=1)):
             raise NotAnAngle('float',self)
         return self.value
+
+    def __array__(self):
+        return self.value
+
+    def __array_wrap__(self,a,context=None):
+        import pdb; pdb.set_trace()
+        if isinstance(a[0],Quantity):
+            s = a.shape
+            a = np.array([x.value for x in a.ravel()]).reshape(s)
+        return Quantity(a,self.unit)
+
+    #def __array__(self):
+    #    print(f"__array__: {self}")
+    #    return np.array(self.value)
 
     # the following are to support numpy trig functions
     #def sin(self):
