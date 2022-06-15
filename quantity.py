@@ -119,7 +119,6 @@ class Quantity:
         return Quantity(other.value - self.value, unit=self.unit)
 
     def __mul__(self,other):
-        print(f"__mul__: {self}, {other}")
         if isinstance(other,Quantity):
             unit = tuple(a + b for a,b in zip(self.unit,other.unit))
             product = Quantity(self.value * other.value, unit=unit)
@@ -250,18 +249,18 @@ class Quantity:
         return self.value
 
     # the following are to support numpy trig functions
-    #def sin(self):
-    #    if not self.compatible(Quantity(1,angle=1)):
-    #        raise NotAnAngle('sin',self)
-    #    return math.sin(self.value)
+    def sin(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('sin',self)
+        return math.sin(self.value)
 
-    #def cos(self):
-    #    if not self.compatible(Quantity(1,angle=1)):
-    #        raise NotAnAngle('cos',self)
-    #    return math.cos(self.value)
+    def cos(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('cos',self)
+        return math.cos(self.value)
 
-    #def tan(self):
-    #    if not self.compatible(Quantity(1,angle=1)):
-    #        raise NotAnAngle('tan',self)
-    #    return math.tan(self.value)
+    def tan(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('tan',self)
+        return math.tan(self.value)
 
