@@ -233,12 +233,15 @@ class Quantity:
 
     def __getattr__(self,name):
         from pval import units as u
+        if name[:2] == "__":
+            print(f"gettarr: {name}")
+            raise AttributeError(f"{name} is not implemented")
         try:
             unit = getattr(u,name)
-            self.assert_compatible(unit)
-            return self/unit
         except Exception as e:
-            raise AttributeError(f"{e}")
+            raise UndefinedUnit(name)
+        self.assert_compatible(unit)
+        return self/unit
 
     def __float__(self):
         if not self.compatible(Quantity(1,angle=1)):
@@ -253,11 +256,11 @@ class Quantity:
 
     def cos(self):
         if not self.compatible(Quantity(1,angle=1)):
-            raise NotAnAngle('sin',self)
+            raise NotAnAngle('cos',self)
         return math.cos(self.value)
 
     def tan(self):
         if not self.compatible(Quantity(1,angle=1)):
-            raise NotAnAngle('sin',self)
+            raise NotAnAngle('tan',self)
         return math.tan(self.value)
 
