@@ -6,6 +6,24 @@ from .exceptions import NotAnAngle
 import math
 import numpy as np
 
+class QuantityArray(np.ndarray):
+    def __new__(self,x,*args,unit,**kwargs):
+        if isinstance(x,np.ndarray):
+            qa = super().__new__(self,x.shape,*args,dtype=x.dtype,**kwargs)
+            qa[:] = x
+        else:
+            qa = super().__new__(self,x,*args,**kwargs)
+        qa.unit = unit
+        return qa
+
+    def __array_finalize__(self,ref):
+        print("finalize: {self,ref}")
+        try:
+            setattr(set,'unit',ref.unit)
+        except:
+            pass
+    
+
 class Quantity:
     """A physical quantity consistiting of a value and fundamental units
 
@@ -120,8 +138,14 @@ class Quantity:
         return Quantity(other.value - self.value, unit=self.unit)
 
     def __mul__(self,other):
-        print(f"__mul__: {self}, {other}")
-        if isinstance(other,Quantity):
+        if isinstance(other,QuantityArray):
+            unit = tuple(a + b for a,b in zip(self.unit,other.unit))
+            product = QuantityArray(other.shape, unit=unit)
+            product[:] = self.value * other
+        elif isinstance(other,np.ndarray):
+            product = QuantityArray(other.shape, unit=self.unit)
+            product[:] = self.value * other
+        elif isinstance(other,Quantity):
             unit = tuple(a + b for a,b in zip(self.unit,other.unit))
             product = Quantity(self.value * other.value, unit=unit)
         else:
@@ -250,33 +274,41 @@ class Quantity:
             raise NotAnAngle('float',self)
         return self.value
 
-    def __array__(self):
-        return self.value
+    # the following are to support numpy
 
-    def __array_wrap__(self,a,context=None):
+    #def __array_ufunc__(self,ufunc,method,*args,**kwargs):
+    #    print(f"array_ufunc: {self}\n  {ufunc}\n  {method}\n  {args}\n  {kwargs}")
+    #    import pdb; pdb.set_trace()
+    #    r = super().__array_ufunc__(ufunc,method,*args,**kwargs)
+    #    r = QuantityArray(r,self.unit)
+    #    return r
+
+    __array_ufunc__ = None
+
+    def __array_prepare__(self,array,context=None):
+        print(f"prepare: {self},  {array},  {array.shape},  {self.unit}")
         import pdb; pdb.set_trace()
-        if isinstance(a[0],Quantity):
-            s = a.shape
-            a = np.array([x.value for x in a.ravel()]).reshape(s)
-        return Quantity(a,self.unit)
+        qa = QuantityArray(array,unit=self.unit)
+        return qa
 
-    #def __array__(self):
-    #    print(f"__array__: {self}")
-    #    return np.array(self.value)
+    def __array_wrap__(self,array,context=None):
+        print(f"wrap: {self},  {array},  {context}");
+        import pdb; pdb.set_trace()
+        return array
 
-    # the following are to support numpy trig functions
-    #def sin(self):
-    #    if not self.compatible(Quantity(1,angle=1)):
-    #        raise NotAnAngle('sin',self)
-    #    return math.sin(self.value)
 
-    #def cos(self):
-    #    if not self.compatible(Quantity(1,angle=1)):
-    #        raise NotAnAngle('cos',self)
-    #    return math.cos(self.value)
+    def sin(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('sin',self)
+        return math.sin(self.value)
 
-    #def tan(self):
-    #    if not self.compatible(Quantity(1,angle=1)):
-    #        raise NotAnAngle('tan',self)
-    #    return math.tan(self.value)
+    def cos(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('cos',self)
+        return math.cos(self.value)
+
+    def tan(self):
+        if not self.compatible(Quantity(1,angle=1)):
+            raise NotAnAngle('tan',self)
+        return math.tan(self.value)
 
